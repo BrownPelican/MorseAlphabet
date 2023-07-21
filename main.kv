@@ -1,0 +1,140 @@
+#:kivy 2.0
+#:import MDNavigationLayout kivymd.uix.navigationdrawer.MDNavigationLayout
+#:import MDNavigationDrawer kivymd.uix.navigationdrawer.MDNavigationDrawer
+#:import OneLineAvatarListItem kivymd.uix.list.OneLineAvatarListItem
+
+MDNavigationLayout:
+
+    ScreenManager:
+        id: screen_manager
+        Screen:
+            name: "screen1"
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: dp(10)
+
+                MDToolbar:
+                    id: toolbar
+                    title: app.title
+                    md_bg_color: app.theme_cls.primary_color
+                    left_action_items: [["menu", lambda x:  nav_drawer.set_state("open")]]
+                    background_palette: "Primary"
+                    MDIconButton:
+                        id: button
+                        icon: app.language
+                        on_release: app.callback(button)
+
+                ScrollView:
+                    id: scroll_view
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        padding: dp(10)
+                        spacing: dp(10)
+
+                        MDBoxLayout:
+                            orientation: "vertical"
+
+                            TextInput:
+                                id: text_input
+                            MDBoxLayout:
+                                id: box_layout
+                                orientation: "horizontal"
+                                padding: dp(10)
+                                spacing: dp(10)
+                                MDFillRoundFlatButton:
+                                    id: flat_button0
+                                    text: app.flat_button_text[0]
+                                    on_press: app.encode()
+                                MDFillRoundFlatButton:
+                                    id: flat_button1
+                                    text: app.flat_button_text[1]
+                                    on_press: app.clearInput()
+
+                        MDBoxLayout:
+                            orientation: "vertical"
+
+                            TextInput:
+                                id: text_output
+                            MDBoxLayout:
+                                orientation: "horizontal"
+                                padding: dp(10)
+                                spacing: dp(10)
+                                MDIconButton:
+                                    icon: "music"
+                                    on_press: app.playSound()
+                                    md_bg_color: app.theme_cls.primary_color
+                                MDIconButton:
+                                    icon: "flashlight"
+                                    md_bg_color: app.theme_cls.primary_color
+                                    on_press: app.useFlashlight()
+
+        Screen:
+            name: "screen2"
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: dp(10)
+
+                MDToolbar:
+                    title: app.title
+                    md_bg_color: app.theme_cls.primary_color
+                    left_action_items: [["menu", lambda x:  nav_drawer.set_state("open")]]
+                    right_action_items: [["dots-horizontal", lambda x: app.callback("settings")]]
+                    background_palette: "Primary"
+
+    MDNavigationDrawer:
+        id: nav_drawer
+        orientation: "vertical"
+        AnchorLayout:
+            anchor_x: "left"
+            size_hint_y: None
+            height: avatar.height
+            Image:
+                id: avatar
+                size_hint: None, None
+                size: "256dp", "256dp"
+                source: "./images/SOS.png"
+        ScrollView:
+            MDList:
+                OneLineAvatarListItem:
+                    id: line_item0
+                    text: app.nav_drawer_text[0]
+                    on_release:
+                        root.ids.screen_manager.current = "screen1"
+                        app.clearInput()
+                        nav_drawer.set_state("close")
+                    IconLeftWidget:
+                        icon: "home"
+
+
+                OneLineAvatarListItem:
+                    id: line_item1
+                    text: app.nav_drawer_text[1]
+                    on_release:
+                        root.ids.screen_manager.current = "screen2"
+                        nav_drawer.set_state("close")
+                    IconLeftWidget:
+                        icon: "tune"
+
+
+                OneLineAvatarListItem:
+                    id: line_item2
+                    text: app.nav_drawer_text[2]
+                    on_release:
+                        root.ids.screen_manager.current = "screen1"
+                        app.setSOS()
+                        nav_drawer.set_state("close")
+                    IconLeftWidget:
+                        icon: "message-processing-outline"
+
+                OneLineAvatarListItem:
+                    id: line_item3
+                    text: app.nav_drawer_text[3]
+                    on_release:
+                        root.ids.screen_manager.current = "screen1"
+                        app.quit()
+                        nav_drawer.set_state("close")
+                    IconLeftWidget:
+                        icon: "exit-to-app"
+
